@@ -1,43 +1,104 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-    @Styles.Render("~/Content/css")
+    <title>@ViewBag.Title</title>
+
+    <link href="~/Assets/ui/css/base/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+    @Styles.Render("~/Assets/css")
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Josefin+Sans%3A400i%2C700i&#038;ver=4.7.4' type='text/css' media='all' />
+
     @Scripts.Render("~/bundles/modernizr")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Nombre de aplicación", "Index", "Home", null, new { @class = "navbar-brand" })
+    <header class="header">
+
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation-menu" aria-expanded="false">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Tienda</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navigation-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="~/venta/">Ventas</a></li>
+                        <li class="dropdown" role="presentation">
+                            <a href="~/mantenimiento/" style="display:inline-block;border-right:1px solid #fff;">Mantenimiento</a>
+                            <a href="#" data-toggle="dropdown" aria-expanded="false" style="display:inline-block;"> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="~/cajero/">Cajeros</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/medicina/">Medicinas</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/mascota/">Mascotas</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/cliente/">Cliente</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/tipoanimal/">Tipo de Animal</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/raza/">Raza</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="~/vendedor/">Vendedores</a></li>
+                        <li><a href="~/producto/">Productos</a></li>
+                        <li><a href="~/categoria/">Categorias</a></li>
+                    </ul>
+                    <div>
+
+                    </div>
+                    <div class="form-search">
+                        <form action="" id="searchbox">
+                            <input type="text" class="form-control" placeholder="Buscar" />
+                            <button class="btn btn-success btn-search fa fa-search"></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                </ul>
+        </nav>
+
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+
+                @RenderBody()
+
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
-        </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <footer class="footer">
+        <div class="redes-sociales">
+            <a href="#" class="img-circle icon-facebook"><span class="fa fa-facebook"></span></a>
+            <a href="#" class="img-circle icon-twitter"><span class="fa fa-twitter"></span></a>
+            <a href="#" class="img-circle icon-gplus"><span class="fa fa-google"></span></a>
+        </div>
+        <div class="link-footer container">
+            <nav class="nav-footer">
+                <ul>
+                    <li><a href="#">Acerca de Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Terminos y Condiciones</a></li>
+                    <li><a href="#">Politica de Cookies</a></li>
+                </ul>
+            </nav>
+            <div class="copyright">
+                <a href="/">Tienda &copy; 2017 - Todos los Derechos Reservados</a>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/Assets/js")
+    <script src="~/Assets/ui/js/jquery-ui-1.9.2.custom.min.js"></script>
+
 </body>
 </html>

@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeterinariaMVC", "VeterinariaMVC\VeterinariaMVC.csproj", "{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{E5F12D4F-958D-4E0C-AA8A-BCA04A07020F}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5F12D4F-958D-4E0C-AA8A-BCA04A07020F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F12D4F-958D-4E0C-AA8A-BCA04A07020F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F12D4F-958D-4E0C-AA8A-BCA04A07020F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F12D4F-958D-4E0C-AA8A-BCA04A07020F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

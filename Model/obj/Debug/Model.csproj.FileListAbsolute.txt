@@ -1,0 +1,10 @@
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\Model.dll.config
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\Model.dll
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\Model.pdb
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\EntityFramework.dll
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\EntityFramework.xml
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\obj\Debug\Model.dll
+C:\Users\Froilan\Desktop\Proyectos\Veterinaria\MVC\Veterinaria\Model\obj\Debug\Model.pdb

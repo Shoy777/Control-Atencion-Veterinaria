@@ -1,0 +1,243 @@
+﻿@model Model.Mascota
+@using Model
+@{
+    Cliente c = new Cliente();
+    ViewBag.Title = (Model.MascotaId > 0 ? Model.Nombre : "Nuevo registro");
+}
+
+<div class="breadcrumb row">
+    <h2 class="text-center">Mascotas</h2>
+    <ol class="breadcrumb">
+        <li><a href="~/mascota/">Mascotas</a></li>
+        <li class="active">@(Model.MascotaId > 0 ? Model.Nombre : "Nuevo Registro")</li>
+    </ol>
+</div>
+@using (Html.BeginForm("Crud", "Mascota", FormMethod.Post, new { id = "frm-mascota", enctype = "multipart/form-data" }))
+{
+    <div class="panel panel-success row">
+        <div class="panel-heading">
+            @if (Model.MascotaId > 0)
+            {
+                <h3 style="color:#fff;">Editar Mascota</h3>
+            }
+            else
+            {
+                <h3 style="color:#fff;">Registrar Mascota</h3>
+            }
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-sm-8">
+
+                    @Html.HiddenFor(model => model.MascotaId)
+                    @if (Model.MascotaId > 0)
+                    {
+                        @Html.HiddenFor(model => model.Estado)
+                    }
+                    
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.ClienteId, "Dueño")
+                        <div class='input-group'>
+                            @Html.DropDownList("ClienteId", (IEnumerable<SelectListItem>)ViewBag.Clientes, "Seleccione Dueño", new { @class = "form-control" })
+                            <span class="btn btn-success input-group-addon" id="btnCliente">
+                                <span class="fa fa-plus"></span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.ClienteId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.EspecieId, "Especie")
+                        @Html.DropDownList("EspecieId", (IEnumerable<SelectListItem>)ViewBag.Especies, "Seleccione Especie", new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.EspecieId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.RazaId, "Raza")
+                        @Html.DropDownList("RazaId", new SelectList(string.Empty, "RazaId", "Descripcion"), "Debe elegir una Especie", new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.RazaId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.Nombre)
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.FechaNacimiento, "Fecha de Nacimiento")
+                        <div class='input-group date' id='datetimepicker1'>
+                            @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control FechaNacimiento" })
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.FechaNacimiento, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group col-sm-12">
+                        @if (Model.MascotaId > 0)
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Guardar Cambios</button>
+                        }
+                        else
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Registrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $("#EspecieId").change(function () {
+            $("#RazaId").empty();  
+            $.ajax({
+                type: 'POST',  
+                url: '@Url.Action("GetAllRazasByEspecie")',
+                dataType: 'json',
+                data: { id: $("#EspecieId").val() },   
+                success: function (razas) {
+                    $("#RazaId").append('<option value="">' +
+                         'Seleccione una raza' + '</option>');
+                    $.each(razas, function (i, raza) {  
+                        $("#RazaId").append('<option value="' + raza.Value + '">' +
+                             raza.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    $("#RazaId").append('<option value="' + 0 + '">' +
+                         'Debe elegir una Especie' + '</option>');
+                }  
+            });  
+            return false;
+        });
+        $('.FechaNacimiento').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            maxDate: -7,
+            yearRange: "-7:+0"
+        });
+
+        $("#btnCliente").click(function () {
+            $('#modalAgregar').modal('show');
+        });
+        $("#frm-cliente").submit(function () {
+            var form = $(this);
+
+            form.ajaxSubmit({
+                dataType: 'JSON',
+                type: 'POST',
+                url: '/Cliente/Crud',
+                data: form.serialize(),
+                success: function (r) {
+                    alert("hola");
+                    if (r.message == "") {
+
+                        $("#NombreCliente").text(r.guardado).show();
+                        $("#ApellidoCliente").text(r.guardado).show();
+                        $("#TelefonoCliente").text(r.guardado).show();
+                        $("#btnGuardar").text(r.guardado).show();
+                        $("#btnGuardar").prop("disabled", true);
+                        $("#btnGuardar").append("<i class='fa fa-check-circle' style='float:right;font-size:21px;'></i>");
+                        $("#btnHide").show();
+                        $("#gmapa-validacion").text(r.error1).hide();
+                        $("#ambientes-validacion").text(r.error1).hide();
+                        $("#entornos-validacion").text(r.error1).hide();
+                        $("#servicios-validacion").text(r.error1).hide();
+                        $("#areas-validacion").text(r.error1).hide();
+                        $("#archivo-validacion").text(r.archivo).hide();
+                        //window.location.href = r.redirect;
+                    }
+                    else {
+                        if (r.archivo != "") {
+                            $("#archivo-validacion").text(r.archivo).show();
+                        } else {
+                            $("#archivo-validacion").text(r.archivo).hide();
+                        }
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+
+<div class="modal fade" id="modalAgregar" tabindex="-1" 
+     role="dialog" aria-labelledby="myLargeModalLabel" 
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-bottom: 15px;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Registrar Dueño</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Crud", "Cliente", FormMethod.Post, new { @id = "frm-cliente" }))
+                {   
+                <div class="panel panel-success row">
+                    <div class="panel-heading">
+                        <h3 style="color:#fff;">Registrar Cliente</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group col-sm-12">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" class="form-control" id="Nombre" name="Nombre" />
+                            <div class="form-group">
+                                <span class="label label-danger" id="NombreCliente"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label for="Apellido">Apellido</label>
+                            <input type="text" class="form-control" id="Apellido" name="Apellido" />
+                            <div class="form-group">
+                                <span class="label label-danger" id="ApellidoCliente"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label for="Telefono">Telefono</label>
+                            <input type="text" class="form-control" id="Telefono" name="Telefono" />
+                            <div class="form-group">
+                                <span class="label label-danger" id="TelefonoCliente"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <button type="submit" value="" id="btnRegistrar" class="btn btn-success form-control">Registrar</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>

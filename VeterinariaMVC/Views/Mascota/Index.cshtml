@@ -1,0 +1,64 @@
+﻿@model List<Model.Mascota>
+@{
+    ViewBag.Title = "Listado de Mascotas";
+}
+
+<div class="breadcrumb">
+    <div class="row">
+        <div class="col-xs-10">
+            <h2>Mascotas</h2>
+        </div>
+        <div class="col-xs-2 text-right">
+            <a class="btn btn-success" href="~/mascota/crud">Nuevo registro</a>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Listado de Mascotas
+    </div>
+    <div class="panel-body">
+        @if (Model.Count == 0)
+        {
+            <h3>Aún no hay mascotas registradas</h3>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-left">
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Raza</th>
+                        <th>Dueño</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.MascotaId</td>
+                            <td>@i.Nombre</td>
+                            <td>@i.Especie.Descripcion</td>
+                            <td>@i.Raza.Descripcion</td>
+                            <td>@i.Cliente.Nombre @i.Cliente.Apellido</td>
+                            <td>@i.Estado</td>
+                            <td class="text-right">
+                                <a class="btn btn-success" href="~/mascota/info/@i.MascotaId" title="Visualizar">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-default" href="~/mascota/crud/@i.MascotaId" title="Editar">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

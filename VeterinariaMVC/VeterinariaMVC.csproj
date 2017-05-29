@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>673d0702-8a0b-4b94-a683-48e37d5e9786</ProjectGuid>
+    <ProjectGuid>{6E7A608F-1B25-4EF3-A1EB-C2120A1475F2}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -15,7 +15,7 @@
     <AssemblyName>VeterinariaMVC</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -39,10 +39,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -115,17 +122,64 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MascotaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\bootstrap-theme.css" />
+    <Content Include="Assets\css\bootstrap-theme.min.css" />
+    <Content Include="Assets\css\bootstrap.css" />
+    <Content Include="Assets\css\bootstrap.min.css" />
+    <Content Include="Assets\css\font-awesome\font-awesome.css" />
+    <Content Include="Assets\css\font-awesome\font-awesome.min.css" />
+    <Content Include="Assets\css\font-awesome\fontawesome-webfont.svg" />
+    <Content Include="Assets\css\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Assets\css\style.css" />
+    <Content Include="Assets\img\house.png" />
+    <Content Include="Assets\img\marker-1.png" />
+    <Content Include="Assets\img\marker-2.png" />
+    <Content Include="Assets\img\marker-3.png" />
+    <Content Include="Assets\img\marker.png" />
+    <Content Include="Assets\js\bootstrap.js" />
+    <Content Include="Assets\js\bootstrap.min.js" />
+    <Content Include="Assets\js\funciones.js" />
+    <Content Include="Assets\js\jquery.form.min.js" />
+    <Content Include="Assets\js\jquery.validate.min.js" />
+    <Content Include="Assets\js\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Assets\js\modernizr-2.6.2.js" />
+    <Content Include="Assets\js\respond.min.js" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Assets\ui\css\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Assets\ui\css\base\jquery-ui-1.9.2.custom.css" />
+    <Content Include="Assets\ui\css\base\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="Assets\ui\js\jquery-1.8.3.js" />
+    <Content Include="Assets\ui\js\jquery-ui-1.9.2.custom.js" />
+    <Content Include="Assets\ui\js\jquery-ui-1.9.2.custom.min.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\_references.js" />
+    <Content Include="Assets\css\font-awesome\fontawesome-webfont.eot" />
+    <Content Include="Assets\css\font-awesome\fontawesome-webfont.ttf" />
+    <Content Include="Assets\css\font-awesome\fontawesome-webfont.woff" />
+    <Content Include="Assets\css\font-awesome\fontawesome-webfont.woff2" />
+    <Content Include="Assets\css\font-awesome\FontAwesome.otf" />
+    <Content Include="Assets\css\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Assets\css\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Assets\css\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Assets\css\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Assets\img\Thumbs.db" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -141,9 +195,21 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{e5f12d4f-958d-4e0c-aa8a-bca04a07020f}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <Content Include="Assets\ui\css\base\images\Thumbs.db" />
     <None Include="Project_Readme.html" />
+    <Content Include="Views\Mascota\Crud.cshtml" />
+    <Content Include="Views\Mascota\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -159,12 +225,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>52525</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:52525/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
