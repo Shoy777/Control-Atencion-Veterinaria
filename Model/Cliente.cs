@@ -27,6 +27,7 @@ namespace Model
         [StringLength(50)]
         public string Apellido { get; set; }
 
+        [Required]
         [StringLength(12)]
         public string Telefono { get; set; }
 
@@ -40,7 +41,7 @@ namespace Model
         public string Message { get; set; }
 
         [NotMapped]
-        public string NombreCompleto { get { return Nombre + " " + Apellido; } }
+        public string NombreCompleto { get { return Apellido + " " + Nombre; } }
 
         public List<Cliente> GetAllClientes()
         {
@@ -51,6 +52,7 @@ namespace Model
                 try
                 {
                     clientes = context.Cliente
+                        .OrderBy(x => x.Apellido)
                         .ToList();
                 }
                 catch (Exception e)
@@ -112,6 +114,27 @@ namespace Model
                     }
                 }
             }
+        }
+
+        public List<Cliente> GetAllClientesByLast()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    clientes = context.Cliente
+                        .OrderByDescending(x => x.ClienteId)
+                        .ToList();
+                }
+                catch (Exception e)
+                {
+                    Message = e.Message;
+                }
+            }
+
+            return clientes;
         }
     }
 }

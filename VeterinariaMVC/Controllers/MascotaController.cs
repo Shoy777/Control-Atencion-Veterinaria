@@ -33,6 +33,7 @@ namespace VeterinariaMVC5.Controllers
         {
             ViewBag.Clientes = new SelectList(cliente.GetAllClientes(), "ClienteId", "NombreCompleto");
             ViewBag.Especies = new SelectList(especie.GetAllEspecies(), "EspecieId", "Descripcion");
+            ViewBag.Razas = new SelectList(raza.GetAllRazas(), "RazaId", "Descripcion");
             return View(id > 0 ? mascota.GetMascota(id) : mascota);
         }
 
@@ -48,6 +49,7 @@ namespace VeterinariaMVC5.Controllers
             {
                 ViewBag.Clientes = new SelectList(cliente.GetAllClientes(), "ClienteId", "Apellido Nombre");
                 ViewBag.Especies = new SelectList(especie.GetAllEspecies(), "EspecieId", "Descripcion");
+                ViewBag.Razas = new SelectList(raza.GetAllRazas(), "RazaId", "Descripcion");
                 m.Message = "No se ha podido registrar mascota";
                 return View("~/views/mascota/crud.cshtml", m);
             }
