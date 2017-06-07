@@ -13,6 +13,23 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+    <style>
+        .dropdown-menu > li > form a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: 400;
+            line-height: 1.42857143;
+            color: #fff;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+            .dropdown-menu > li > form a:hover {
+                color: #262626;
+                background-color: #f5f5f5;
+            }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -30,10 +47,8 @@
 
                 <div class="collapse navbar-collapse" id="navigation-menu">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="~/venta/">Ventas</a></li>
                         <li class="dropdown" role="presentation">
-                            <a href="~/mantenimiento/" style="display:inline-block;border-right:1px solid #fff;">Mantenimiento</a>
-                            <a href="#" data-toggle="dropdown" aria-expanded="false" style="display:inline-block;"> <span class="caret"></span></a>
+                            <a href="#" data-toggle="dropdown" aria-expanded="false" style="display:inline-block;">Mantenimiento <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="~/cajero/">Cajeros</a></li>
                                 <li class="divider"></li>
@@ -48,13 +63,34 @@
                                 <li><a href="~/raza/">Raza</a></li>
                             </ul>
                         </li>
-                        <li><a href="~/vendedor/">Vendedores</a></li>
-                        <li><a href="~/producto/">Productos</a></li>
-                        <li><a href="~/categoria/">Categorias</a></li>
+                        <li><a href="~/consulta/">Consultas</a></li>
+                        <li><a href="~/atencion/">Atencion</a></li>
+                        <li><a href="~/venta/">Ventas</a></li>
                     </ul>
-                    <div>
-
-                    </div>
+                    <ul class="nav navbar-nav right">
+                        <li class="dropdown" role="presentation">
+                            <a href="#" data-toggle="dropdown" aria-expanded="false">
+                                <b>
+                                @if (HttpContext.Current.User.Identity.IsAuthenticated) {
+                                    <span>@VeterinariaMVC.Controllers.UsuarioController.Get().Nombre</span>
+                                    <span>@VeterinariaMVC.Controllers.UsuarioController.Get().Apellido</span>
+                                }
+                                </b>
+                            <span class="caret"></span></a>
+                            <ul class="dropdown-menu" style="left: inherit; right: 0;">
+                                <li><a href="~/usuario/perfil">Perfil</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/usuario/cambiarPassword/">Cambiar Clave</a></li>
+                                <li class="divider"></li>
+                                <li>
+                                    @using (Html.BeginForm("Logout", "Usuario", FormMethod.Post))
+                                    {
+                                        <a href="javascript:;" onclick="document.forms[0].submit();">Logout</a>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                     <div class="form-search">
                         <form action="" id="searchbox">
                             <input type="text" class="form-control" placeholder="Buscar" />
@@ -92,7 +128,7 @@
                 </ul>
             </nav>
             <div class="copyright">
-                <a href="/">Tienda &copy; 2017 - Todos los Derechos Reservados</a>
+                <a href="/">Froilan Cerna &copy; 2017 - Todos los Derechos Reservados</a>
             </div>
         </div>
     </footer>

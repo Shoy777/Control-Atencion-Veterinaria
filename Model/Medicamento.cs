@@ -5,6 +5,7 @@ namespace Model
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     [Table("Medicamento")]
     public partial class Medicamento
@@ -51,5 +52,28 @@ namespace Model
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receta> Receta { get; set; }
+
+        public List<Medicamento> GetAllMedicamentos()
+        {
+            List<Medicamento> medicamentos = new List<Medicamento>();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    medicamentos = context.Medicamento
+                        .Include("TipoMedicamento")
+                        .Include("Especie")
+                        .Include("Laboratorio")
+                        .ToList();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return medicamentos;
+        }
     }
 }

@@ -1,6 +1,8 @@
 body{
 	font-family: 'Josefin Sans',Helvetica,cursive,sans-serif;
     background-color: #f8f8f8;
+    background-image: url(../img/fondo.jpg);
+    background-attachment: fixed;
 }
 a{
 	color: #35404d;
@@ -17,6 +19,8 @@ a{
     .form-search{
         width:250px;
         margin-bottom: 0px;
+        margin-left: 10px;
+        margin-right: 10px;
         height:50px;
     }
 }
@@ -88,6 +92,7 @@ a.img-circle{
 /*HEADER BARRA DE NAVEGACION*/
 .navbar{
 	background-color: #fff;
+    background-color: rgba(255,255,255,.75);
 	border-bottom: 1px solid #f1f2f7;
     border-top: 0;
 }
@@ -95,6 +100,7 @@ a.img-circle{
 /*FOOTER*/
 .footer{
 	background-color: #5dab5e;
+    background-color: rgba(93, 171, 94,.75);
 	padding: 10px 0;
 }
 /*REDES SOCIALES*/
@@ -124,6 +130,7 @@ a.img-circle{
 }
 .footer .link-footer .nav-footer ul li a, .footer .link-footer .copyright a{
 	color: #fff;
+    font-weight: 700;
 }
 .footer .link-footer .nav-footer ul li a:hover, .footer .link-footer .copyright a:hover{
 	color: #f8f8f8;

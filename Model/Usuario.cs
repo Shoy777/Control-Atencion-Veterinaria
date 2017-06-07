@@ -4,12 +4,16 @@ namespace Model
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Security;
 
     [Table("Usuario")]
     public partial class Usuario
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Usuario()
         {
             Consulta = new HashSet<Consulta>();
@@ -17,43 +21,213 @@ namespace Model
         }
 
         public int UsuarioId { get; set; }
-
         public int RolId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese Nombre")]
         [StringLength(50)]
         public string Nombre { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese Apellido")]
         [StringLength(50)]
         public string Apellido { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese Telefono")]
+        [Phone]
         [StringLength(12)]
         public string Telefono { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese DNI")]
         [StringLength(8)]
         public string DNI { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese Nombre de Usuario")]
         [StringLength(50)]
+        [Display(Name = "Nombre de usuario")]
         public string NombreUsuario { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(50, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
+        [NotMapped]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Seleccione un turno")]
         public byte Turno { get; set; }
-
+        [Required]
         public byte Estado { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Consulta> Consulta { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Diagnostico> Diagnostico { get; set; }
-
         public virtual Rol Rol { get; set; }
+
+        [NotMapped]
+        public string Message { get; set; }
+
+        [NotMapped]
+        [Display(Name = "¿Recordar cuenta?")]
+        public bool RememberMe { get; set; }
+
+        public List<Usuario> GetAllUsuarios()
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    usuarios = context.Usuario
+                        .OrderByDescending(x => x.UsuarioId)
+                        .ToList();
+                }
+                catch (Exception e)
+                {
+                    Message = e.Message;
+                }
+            }
+
+            return usuarios;
+        }
+
+        public Usuario GetUsuario(int id)
+        {
+            Usuario usuario = new Usuario();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    usuario = context.Usuario
+                        .Include("Rol")
+                        .Where(x => x.UsuarioId == id)
+                        .Single();
+                }
+                catch (Exception e)
+                {
+                    Message = e.Message;
+                }
+            }
+            return usuario;
+        }
+
+        public void CrudUsuario()
+        {
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (this.UsuarioId == 0)
+                        {
+                            context.Entry(this).Entity.Estado = 1;//Activo = 1, De Baja = 0
+                            context.Entry(this).State = EntityState.Added;
+                        }
+                        else
+                        {
+                            context.Configuration.AutoDetectChangesEnabled = false;
+                            context.Configuration.ValidateOnSaveEnabled = false;
+                            
+                            context.Entry(this).State = EntityState.Modified;
+
+                            context.Entry(this).Property(x => x.Password).IsModified = false;
+                            context.Entry(this).Property(x => x.Estado).IsModified = false;
+
+                        }
+                        context.SaveChanges();
+                        transaction.Commit();
+                        Message = "Registro guardado";
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        Message = e.Message;
+                        throw new Exception(e.Message);
+                    }
+                }
+            }
+        }
+
+        public Usuario Login(string user, string password)
+        {
+            Usuario usuario = new Usuario();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    usuario = context.Usuario
+                        .Include("Rol")
+                        .Where(x => x.NombreUsuario == user && x.Password == password)
+                        .FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                    //Message = e.Message;
+                }
+            }
+            return usuario;
+        }
+
+        public int CambiarPassword(string Password, string NewPassword, int UsuarioId)
+        {
+            int usu = 0;
+
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                     usu = context.Database.ExecuteSqlCommand(
+                               "UPDATE Usuario set Password = '" + NewPassword + "' WHERE Password = @Password AND UsuarioId = @UsuarioId",
+                               new SqlParameter("Password", Password),
+                               new SqlParameter("UsuarioId", UsuarioId)
+                           );
+
+                        context.Configuration.ValidateOnSaveEnabled = false;
+                        
+                        context.SaveChanges();
+                        transaction.Commit();
+                        Message = "La contraseña se ha cambiado.";
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        Message = e.Message;
+                        throw new Exception(e.Message);
+                    }
+                }
+            }
+            return usu;
+        }
     }
+
+    public class CambiarPassword
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contraseña actual")]
+        public string OldPassword { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nueva contraseña")]
+        public string NewPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar la nueva contraseña")]
+        [Compare("NewPassword", ErrorMessage = "La nueva contraseña y la contraseña de confirmación no coinciden.")]
+        public string ConfirmPassword { get; set; }
+    }
+
 }

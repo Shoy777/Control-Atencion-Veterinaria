@@ -5,10 +5,10 @@
 
 <div class="breadcrumb">
     <div class="row">
-        <div class="col-xs-10">
+        <div class="col-sm-10">
             <h2>Mascotas</h2>
         </div>
-        <div class="col-xs-2 text-right">
+        <div class="col-sm-2 text-right">
             <a class="btn btn-success" href="~/mascota/crud">Nuevo registro</a>
         </div>
     </div>
@@ -46,7 +46,16 @@
                             <td>@i.Especie.Descripcion</td>
                             <td>@i.Raza.Descripcion</td>
                             <td>@i.Cliente.Nombre @i.Cliente.Apellido</td>
-                            <td>@i.Estado</td>
+                            @if (i.Estado == 0)
+                            {
+                                <td>Muerto</td>
+                            }else if(i.Estado == 1){
+                                <td>Vivo</td>
+                            }
+                            else
+                            {
+                                <td>Enfermo</td>      
+                            }
                             <td class="text-right">
                                 <a class="btn btn-success" href="~/mascota/info/@i.MascotaId" title="Visualizar">
                                     <i class="fa fa-eye"></i>

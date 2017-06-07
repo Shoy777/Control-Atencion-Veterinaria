@@ -1,0 +1,71 @@
+﻿@model List<Model.Medicamento>
+@{
+    ViewBag.Title = "Index";
+    List<Model.Medicamento> lista = new List<Model.Medicamento>();
+}
+<style>
+    .list-group {
+        padding-left: 0;
+        margin-bottom: 0px;
+    }
+    .list-group-item {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .list-group-item-success {
+        white-space: initial;
+        margin: auto;
+        background-color: rgba(93, 171, 94,.95);
+        text-align: center;
+        padding:15px;
+    }
+    .panel-body {
+        padding: 0;
+    }
+    .panel img {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+    }
+    .list-group {
+        padding-left: 0;
+        margin-bottom: 0px;
+        list-style: none;
+
+    }
+    .col-xs-6, .col-sm-3, .col-sm-12{
+        padding-right:5px;
+        padding-left:5px;
+    }
+    .col-sm-12 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+</style>
+Hay @lista.Count Productos
+
+@foreach (var i in Model)
+{
+    <div class="col-sm-3 col-xs-6">
+        <div class="panel panel-success">
+            <div class="panel-body">
+                    <div class="col-sm-12">
+                        <ul class="list-group">
+                            <li class="list-group-item-success"><img src="~/Uploads/@i.Imagen" class="img-circle" /></li>
+                            <li class="list-group-item list-group-item-warning" style="height:70px;">@i.Nombre</li>
+                            <li class="list-group-item">@i.TipoMedicamento.Descripcion</li>
+                            <li class="list-group-item">Especie - @i.Especie.Descripcion</li>
+                            <li class="list-group-item">Laboratorio @i.Laboratorio.Descripcion</li>
+                            <li class="list-group-item text-right">S/. @i.Precio</li>
+                            <li class="list-group-item"><span class="left">
+                                Stock:
+                                </span> <span class="right">@i.Stock</span>
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        </div>
+    </div>
+}
+

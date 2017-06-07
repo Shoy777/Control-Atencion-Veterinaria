@@ -1,0 +1,9 @@
+﻿@model List<Model.Medicamento>
+@{
+    ViewBag.Title = "Medicamentos";
+}
+
+<h2>Medicamentos</h2>
+@foreach(var i in Model){
+    @i.Stock
+}
