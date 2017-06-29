@@ -1,0 +1,190 @@
+﻿@model Model.Consulta
+
+@{
+    ViewBag.Title = (Model.ConsultaId > 0 ? Model.CajeroId.ToString() : "Nuevo registro");
+}
+
+<div class="breadcrumb row">
+    <h2 class="text-center">Consultas</h2>
+    <ol class="breadcrumb">
+        <li><a href="~/consulta/">Consultas</a></li>
+        <li class="active">@(Model.ConsultaId > 0 ? Model.CajeroId.ToString() : "Nuevo Registro")</li>
+    </ol>
+</div>
+@using (Html.BeginForm("Crud", "Consulta", FormMethod.Post, new { id = "frm-consulta" }))
+{
+    <div class="panel panel-success row">
+        <div class="panel-heading">
+            @if (Model.ConsultaId > 0)
+            {
+                <h3>Editar Consulta</h3>
+            }
+            else
+            {
+                <h3>Registrar Consulta</h3>
+            }
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-sm-8">
+
+                    @Html.HiddenFor(model => model.ConsultaId)
+                    
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.ClienteId, "Dueño *")
+                        <div class='input-group'>
+                            @if(Model.ConsultaId > 0){
+                                <input id="NombreCliente" class="form-control" placeholder="Cliente" readonly="" value="@ViewBag.NombreCliente" />
+                            }
+                            else
+                            {
+                                <input id="NombreCliente" class="form-control" placeholder="Cliente" readonly="" />
+                            }
+                            @Html.HiddenFor(model => model.ClienteId, new { @class = "form-control", @readonly = "" })
+                            <span class="btn btn-success input-group-addon" id="btnCliente">
+                                <span class="fa fa-search"></span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.ClienteId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.MascotaId, "Mascota *")
+                        @if (Model.ConsultaId > 0)
+                        {
+                            <input id="NombreMascota" class="form-control" placeholder="Mascota" readonly="" value="@ViewBag.NombreMascota" />
+                        }
+                        else
+                        {
+                            <input id="NombreMascota" class="form-control" placeholder="Mascota" readonly=""/>
+                        }
+                        @Html.HiddenFor(model => model.MascotaId, new { @class = "form-control", @readonly = "" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.MascotaId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.FechaAtencion, "Fecha de Atencion *")
+                        <div class='input-group date' id='datetimepicker1'>
+                            @Html.TextBoxFor(model => model.FechaAtencion, new { @class = "form-control fechaAtencion", @readonly = "", @placeholder = "Fecha de Atencion" })
+                            <span class="input-group-addon" id="btnFecha">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.FechaAtencion, null, new { @class = "label label-danger" })
+                            <label class="label label-danger" id="fechaValidacion"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(x => x.Turno, "Turno *")
+                        <select name="Turno" class="form-control">
+                            <option @(Model.Turno == 1 ? "selected" : "") value="1">Mañana</option>
+                            <option @(Model.Turno == 2 ? "selected" : "") value="2">Tarde</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Precio, "Precio *")
+                        @Html.TextBoxFor(model => model.Precio, new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.Precio, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group col-sm-12">
+                        @if (Model.ConsultaId > 0)
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Guardar Cambios</button>
+                        }
+                        else
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Registrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Buscar Mascota X Cliente</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="frm-buscarCliente">
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input id="query" name="query" class="form-control" placeholder="Buscar Cliente" />
+                            <button type="submit" class="btn btn-success btn-submit" id="btnBuscarCliente">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                    
+                <div class="panel panel-success row">
+                    <div class="panel-heading">
+                        <h3>Buscar Cliente</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="form-cliente">
+                            <label class="label label-danger mensajeCliente hide"></label>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Cliente</th>
+                                        <th>Apellido</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="clientes">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                    
+                <div class="panel panel-success row">
+                    <div class="panel-heading">
+                        <h3>Seleccione Mascota</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="form-cliente">
+                            <label class="label label-danger mensajeMascota hide"></label>
+                                
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Mascota</th>
+                                        <th>Fecha Nacimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="mascotas">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

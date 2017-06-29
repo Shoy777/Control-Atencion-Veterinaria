@@ -1,0 +1,57 @@
+﻿@model Model.Cliente
+@{
+    ViewBag.Title = (Model.ClienteId > 0 ? Model.NombreCompleto : "Cliente");
+}
+
+<div class="breadcrumb">
+    <ol class="breadcrumb">
+        <li><a href="~/cliente/">Clientes</a></li>
+        <li class="active">@Model.NombreCompleto</li>
+    </ol>
+</div>
+
+<div class="col-sm-6 clearfix">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Datos del Cliente Nº @Model.ClienteId</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <span class="block text-success bold">Nombre</span>
+                <span class="block">@Model.Nombre</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Apellido</span>
+                <span class="block">@Model.Apellido</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Telefono</span>
+                <span class="block">@Model.Telefono</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6 clearfix">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Mascotas del Cliente</h3>
+        </div>
+        <div class="panel-body">
+            @if (Model.Mascota.Count == 0)
+            {
+                <h4>El cliente no tiene mascotas registradas</h4>
+            }
+            else
+            {
+                foreach (var i in Model.Mascota)
+                {
+                    <div class="form-group">
+                        <span class="block text-success bold">Nombre de Mascota</span>
+                        <span class="block">@i.Nombre</span>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>

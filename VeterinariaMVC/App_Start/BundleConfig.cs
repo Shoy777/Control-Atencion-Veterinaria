@@ -23,7 +23,7 @@ namespace VeterinariaMVC
                       "~/Assets/js/jquery.validate.min.js",
                       "~/Assets/js/jquery.validate.unobtrusive.min.js",
                       "~/Assets/js/jquery.form.min.js",
-                      "~/Assets/js/funciones.min.js"));
+                      "~/Assets/js/funciones.js"));
 
         }
     }

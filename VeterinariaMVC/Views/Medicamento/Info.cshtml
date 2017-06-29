@@ -1,0 +1,59 @@
+﻿@model Model.Medicamento
+@{
+    ViewBag.Title = (Model.MedicamentoId > 0 ? Model.Nombre : "Medicina");
+}
+
+<div class="breadcrumb">
+    <ol class="breadcrumb">
+        <li><a href="~/medicamento/">Medicamentos</a></li>
+        <li class="active">@Model.Nombre</li>
+    </ol>
+</div>
+
+<div class="col-sm-6 clearfix">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Datos del Medicamento Nº @Model.MedicamentoId</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <span class="block text-success bold">Nombre</span>
+                <span class="block">@Model.Nombre</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Laboratorio</span>
+                <span class="block">@Model.Laboratorio.Descripcion</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Especie</span>
+                <span class="block">@Model.Especie.Descripcion</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Tipo de Medicamento</span>
+                <span class="block">@Model.TipoMedicamento.Descripcion</span>
+            </div>
+            <div class="form-group">
+                <span class="block text-success bold">Precio</span>
+                <span class="block">@Model.Precio</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6 clearfix">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Descripcion del Medicamento</h3>
+        </div>
+        <div class="panel-body">
+            @if (Model.Descripcion == null)
+            {
+                <h4>No se ha detallado ninguna descripcion</h4>
+            }
+            else
+            {
+                <p>@Model.Descripcion</p>
+            }
+        </div>
+    </div>
+
+</div>

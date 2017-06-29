@@ -10,14 +10,31 @@ namespace VeterinariaMVC.Controllers
 {
     public class UsuarioController : Controller
     {
-        //
-        // GET: /Usuario/
         Usuario usuario = new Usuario();
         Rol rol = new Rol();
 
         public ActionResult Index()
         {
-            return View(usuario.GetAllUsuarios());
+            /*Rol Cajero*/
+            if (UsuarioController.Get().Rol.Descripcion.Equals("Cajero"))
+            {
+                return Redirect("~/Usuario/Perfil");
+            }
+            /*Rol Admin y Veterinario*/
+            else
+                return View(usuario.GetAllUsuarios(1));
+        }
+
+        public ActionResult Eliminados()
+        {
+            /*Rol Cajero*/
+            if (UsuarioController.Get().Rol.Descripcion.Equals("Cajero"))
+            {
+                return Redirect("~/Usuario/Perfil");
+            }
+            /*Rol Admin y Veterinario*/
+            else
+                return View(usuario.GetAllUsuarios(0));
         }
 
         public ActionResult Crud(int id = 0)
@@ -42,17 +59,120 @@ namespace VeterinariaMVC.Controllers
         [HttpPost]
         public ActionResult Crud(Usuario model)
         {
-            if (ModelState.IsValid)
+            VeterinariaBDContext context = new VeterinariaBDContext();
+            var dni = context.Usuario.Where(x => x.DNI == model.DNI).FirstOrDefault();
+            var user = context.Usuario.Where(x => x.NombreUsuario == model.NombreUsuario).FirstOrDefault();
+            var nombre = context.Usuario.Where(x => x.Nombre == model.Nombre && x.Apellido == model.Apellido).FirstOrDefault();
+
+            ModelState.Remove("Password");
+            var errors = ModelState.Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new { x.Key, x.Value.Errors })
+                .ToArray();
+
+            /*Editar*/
+            if (model.UsuarioId > 0)
             {
-                model.CrudUsuario();
-                return Redirect("~/usuario/");
+                var usu = context.Usuario.Where(x => x.UsuarioId == model.UsuarioId).FirstOrDefault();
+                if (dni != null && !model.DNI.Equals(usu.DNI))
+                {
+                    if (model.DNI.Equals(dni.DNI) && model.UsuarioId != dni.UsuarioId)
+                        ViewBag.Message = "Ya existe usuario con el mismo DNI";
+                }
+                else if (user != null && !model.NombreUsuario.Equals(usu.NombreUsuario))
+                {
+                    if (model.NombreUsuario.Equals(user.NombreUsuario) && model.UsuarioId != user.UsuarioId)
+                        ViewBag.Message = "Ya existe usuario con el mismo Nombre de Usuario";
+                }
+                else if (nombre != null && !(model.Nombre.Equals(usu.Nombre) && model.Apellido.Equals(usu.Apellido)))
+                {
+                    if (model.Nombre.Equals(nombre.Nombre) && model.Apellido.Equals(nombre.Apellido) && model.UsuarioId != nombre.UsuarioId)
+                        ViewBag.Message = "Ya existe usuario con el mismo Nombre y Apellido";
+                }
+                else if(ModelState.IsValid)
+                {
+                    model.CrudUsuario();
+                    return Redirect("~/usuario/");
+                }
+            }
+            /*Registrar*/
+            else
+            {
+                if (dni != null && model.UsuarioId == 0)
+                {
+                    ViewBag.Message = "Ya existe usuario con el mismo DNI";
+                }
+                else if (user != null && model.UsuarioId == 0)
+                {
+                    ViewBag.Message = "Ya existe usuario con el mismo Nombre de Usuario";
+                }
+                else if (nombre != null && model.UsuarioId == 0)
+                {
+                    ViewBag.Message = "Ya existe usuario con el mismo Nombre y Apellido";
+                }
+                else if (ModelState.IsValid)
+                {
+                    model.CrudUsuario();
+                    return Redirect("~/usuario/");
+                }
+            }
+            ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+            return View("~/views/usuario/crud.cshtml", model);
+        }
+
+        public ActionResult Eliminar(int id = 0)
+        {
+            ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+
+            if (UsuarioController.Get().Rol.Descripcion.Equals("Cajero"))
+            {
+                return Redirect("~/Usuario/Perfil");
             }
             else
             {
-                ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
-                model.Message = "No se ha podido registrar usuario";
-                return View("~/views/usuario/registrar.cshtml", model);
+                return View(usuario.GetUsuario(id));
             }
+        }
+
+        [HttpPost]
+        public ActionResult Eliminar(Usuario model)
+        {
+            if (model.UsuarioId == UsuarioController.Get().UsuarioId)
+            {
+                ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+                ViewBag.Message = "Usted no puede eliminar su cuenta";
+                model = UsuarioController.Get();
+                return View("~/views/usuario/eliminar.cshtml", model);
+            }
+            else
+            {
+                usuario.CambiarEstado(0, model.UsuarioId);
+                ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+                return Redirect("~/usuario/eliminados");
+            }
+
+        }
+
+        public ActionResult Restaurar(int id = 0)
+        {
+            ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+
+            if (UsuarioController.Get().Rol.Descripcion.Equals("Cajero"))
+            {
+                return Redirect("~/Usuario/Perfil");
+            }
+            else
+            {
+                return View(usuario.GetUsuario(id));
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Restaurar(Usuario model)
+        {
+            usuario.CambiarEstado(1, model.UsuarioId);
+            ViewBag.Roles = new SelectList(rol.GetAllRoles(), "RolId", "Descripcion");
+            return Redirect("~/usuario/");
+
         }
 
         public ActionResult CambiarPassword()
@@ -104,18 +224,26 @@ namespace VeterinariaMVC.Controllers
 
             if (usuario != null)
             {
-                var cookie = FormsAuthentication.GetAuthCookie("usuario", user.RememberMe);
+                if (usuario.Estado == 1)
+                {
+                    var cookie = FormsAuthentication.GetAuthCookie("usuario", user.RememberMe);
 
-                cookie.Name = FormsAuthentication.FormsCookieName;
+                    cookie.Name = FormsAuthentication.FormsCookieName;
 
-                var ticket = FormsAuthentication.Decrypt(cookie.Value);
-                var newTicket = new FormsAuthenticationTicket(1, ticket.Name,
-                    ticket.IssueDate, ticket.Expiration, user.RememberMe, usuario.UsuarioId.ToString());
+                    var ticket = FormsAuthentication.Decrypt(cookie.Value);
+                    var newTicket = new FormsAuthenticationTicket(1, ticket.Name,
+                        ticket.IssueDate, ticket.Expiration, user.RememberMe, usuario.UsuarioId.ToString());
 
-                cookie.Value = FormsAuthentication.Encrypt(newTicket);
-                System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
+                    cookie.Value = FormsAuthentication.Encrypt(newTicket);
+                    System.Web.HttpContext.Current.Response.Cookies.Add(cookie);
 
-                return Redirect("~/");
+                    return Redirect("~/");
+                }
+                else
+                {
+                    ViewBag.Message = "Su cuenta ha sido desabilitada";
+                    return View(user);
+                }
             }
             else
             {

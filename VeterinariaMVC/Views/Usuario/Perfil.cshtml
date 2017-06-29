@@ -1,182 +1,61 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Perfil";
 }
 
-<style>
-    .panel {
-        border: none;
-        box-shadow: none;
-    }
-    .profile-nav .user-heading {
-        background: #ff766c;
-        background: #01a89e;
-        color: #fff;
-        border-radius: 4px 4px 0 0;
-        -webkit-border-radius: 4px 4px 0 0;
-        padding: 30px;
-        text-align: center;
-    }
-        .profile-nav .user-heading.round a {
-            border-radius: 50%;
-            -webkit-border-radius: 50%;
-            border: 10px solid rgba(255,255,255,0.3);
-            display: inline-block;
-        }
-        .profile-nav .user-heading a img {
-            width: 112px;
-            height: 112px;
-            border-radius: 50%;
-            -webkit-border-radius: 50%;
-        }
-    .profile-nav ul {
-        margin-top: 1px;
-    }
+<div id="perfil">
+    <div class="col-sm-4">
+        <aside class="profile-nav col-sm-12">
+            <section class="panel">
+                <div class="user-heading round">
+                    <a href="~/Usuario/Perfil">
+                        <img src="~/Assets/img/user.png" alt="" />
+                    </a>
+                    <h1>@VeterinariaMVC.Controllers.UsuarioController.Get().Nombre @VeterinariaMVC.Controllers.UsuarioController.Get().Apellido</h1>
+                    <p>@VeterinariaMVC.Controllers.UsuarioController.Get().NombreUsuario</p>
+                </div>
 
-        .profile-nav ul > li {
-            border-bottom: 1px solid #ebeae6;
-            margin-top: 0;
-            line-height: 30px;
-        }
-            .profile-nav ul > li > a:hover, .profile-nav ul > li > a:focus, .profile-nav ul li.active a {
-                background: #f8f7f5 !important;
-                border-left: 5px solid #ff766c;
-                border-left: 5px solid #01a89e;
-                color: #89817f !important;
-            }
-            .profile-nav ul > li > a {
-                border-radius: 0;
-                -webkit-border-radius: 0;
-                color: #89817f;
-                border-left: 5px solid #fff;
-            }
-    .profile-info .panel-footer {
-        background-color: #f8f7f5;
-        border-top: 1px solid #e7ebee;
-    }
-    .panel-footer {
-        padding: 10px 15px;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-    }
-    textarea{
-        width:100%;
-        min-width:100%;
-        min-height:62px;
-    }
-    .p-text-area, .p-text-area:focus {
-        border: none;
-        font-weight: 300;
-        box-shadow: none;
-        color: #c3c3c3;
-        font-size: 16px;
-    }
-    .bio-graph-heading {
-        background: #41cac0;
-        color: #fff;
-        text-align: center;
-        font-style: italic;
-        padding: 40px 110px;
-        border-radius: 4px 4px 0 0;
-        -webkit-border-radius: 4px 4px 0 0;
-        font-size: 16px;
-        font-weight: 300;
-    }
-    .bio-graph-info {
-        color: #89817e;
-    }
-        .bio-graph-info h1 {
-            font-size: 22px;
-            font-weight: 300;
-            margin: 0 0 20px;
-        }
-    .bio-row {
-        width: 50%;
-        float: left;
-        margin-bottom: 10px;
-        padding: 0 15px;
-    }
-</style>
-<div class="col-sm-4">
-    <aside class="profile-nav col-sm-12">
-        <section class="panel">
-            <div class="user-heading round">
-                <a href="~/Usuario/Perfil">
-                    <img src="~/Assets/img/user.jpg" alt="">
-                </a>
-                <h1>@VeterinariaMVC.Controllers.UsuarioController.Get().Nombre @VeterinariaMVC.Controllers.UsuarioController.Get().Apellido</h1>
-                <p>@VeterinariaMVC.Controllers.UsuarioController.Get().NombreUsuario</p>
-            </div>
-
-            <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="~/Usuario/Perfil"> <i class="fa fa-user"></i> Perfil</a></li>
-                <li><a href="#"> <i class="fa fa-calendar"></i> Activitdad Reciente<span class="label label-danger pull-right r-activity">9</span></a></li>
-                <li><a href="~/Usuario/Crud/@VeterinariaMVC.Controllers.UsuarioController.Get().UsuarioId"><i class="fa fa-edit"></i> Editar perfil</a></li>
-            </ul>
-
-        </section>
-    </aside>
-    </div>
-<div class="col-sm-8">
-    <aside class="profile-info col-sm-12">
-        <section class="panel">
-            <form>
-                <textarea placeholder="Whats in your mind today?" rows="2" class="form-control input-lg p-text-area"></textarea>
-            </form>
-            <footer class="panel-footer">
-                <button class="btn btn-danger pull-right">Post</button>
-                <ul class="nav nav-pills">
-                    <li>
-                        <a href="#"><i class="fa fa-map-marker"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-camera"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class=" fa fa-film"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-microphone"></i></a>
-                    </li>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active"><a href="~/Usuario/Perfil"> <i class="fa fa-user"></i> Perfil</a></li>
+                    <li><a href="~/Usuario/Crud/@VeterinariaMVC.Controllers.UsuarioController.Get().UsuarioId"><i class="fa fa-edit"></i> Editar perfil</a></li>
+                    <li><a href="~/Usuario/cambiarPassword"> <i class="fa fa-key"></i> Cambiar Clave</a></li>
                 </ul>
-            </footer>
-        </section>
-        <section class="panel">
-            <div class="bio-graph-heading">
-                Aliquam ac magna metus. Nam sed arcu non tellus fringilla fringilla ut vel ispum. Aliquam ac magna metus.
-            </div>
-            <div class="panel-body bio-graph-info">
-                <h1>Biografia</h1>
-                <div class="row">
-                    <div class="bio-row">
-                        <p><span>Nombre </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Nombre</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>Apellido </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Apellido</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>País </span>: Perú</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>Birthday</span>: 13 July 1983</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>Ocupacion </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Rol.Descripcion</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>DNI </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().DNI</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>Mobile </span>: (12) 03 4567890</p>
-                    </div>
-                    <div class="bio-row">
-                        <p><span>Phone </span>: 88 (02) 123456</p>
+
+            </section>
+        </aside>
+    </div>
+    <div class="col-sm-8">
+        <aside class="profile-info col-sm-12">
+            <section class="panel">
+                <div class="bio-graph-heading">
+                    <h4 class="text-uppercase">
+                        @VeterinariaMVC.Controllers.UsuarioController.Get().Nombre
+                        @VeterinariaMVC.Controllers.UsuarioController.Get().Apellido
+                    </h4>
+                </div>
+                <div class="panel-body bio-graph-info">
+                    <h1>Biografia</h1>
+                    <div class="row">
+                        <div class="bio-row">
+                            <p><span>Nombre </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Nombre</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Apellido </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Apellido</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>User </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().NombreUsuario</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Ocupacion </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Rol.Descripcion</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>DNI </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().DNI</p>
+                        </div>
+                        <div class="bio-row">
+                            <p><span>Telefono </span>: @VeterinariaMVC.Controllers.UsuarioController.Get().Telefono</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-</aside>
-
+            </section>
+        </aside>
+    </div>
 </div>

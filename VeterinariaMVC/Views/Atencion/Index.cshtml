@@ -1,0 +1,65 @@
+﻿@model List<Model.DiagnosticoList>
+@{
+    ViewBag.Title = "Listado de Diagnostico por Atencion";
+}
+
+<div class="breadcrumb">
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Diagnosticos de Mascotas atendidas</h2>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Listado de Diagnoticos
+    </div>
+    <div class="panel-body">
+        @if (Model.Count == 0)
+        {
+            <h3>Aún no hay diagnosticos disponibles</h3>
+        }
+        else
+        {
+
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>N Consulta</th>
+                        <th>Veterinario</th>
+                        <th>Cliente</th>
+                        <th>Mascota</th>
+                        <th>Fecha de Atencion</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.DiagnosticoId</td>
+                            <td>@i.ConsultaId</td>
+                            <td>@i.VeterinarioNombre @i.VeterinarioApellido</td>
+                            <td>@i.ClienteNombre @i.ClienteApellido</td>
+                            <td>@i.Mascota</td>
+                            <td>@i.FechaDiagnostico</td>
+                            <td class="text-right">
+                                <a class="btn btn-default" href="~/atencion/detalle/@i.ConsultaId" title="Detalle">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-success" href="~/atencion/receta/@i.ConsultaId" title="Generar Receta">
+                                    <i class="fa fa-medkit"></i>
+                                </a>
+                                <a class="btn btn-default" href="~/atencion/receta/@i.ConsultaId" title="Imprimir">
+                                    <i class="fa fa-print"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

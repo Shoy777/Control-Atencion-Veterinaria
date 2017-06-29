@@ -5,11 +5,11 @@ namespace Model
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     [Table("TipoMedicamento")]
     public partial class TipoMedicamento
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TipoMedicamento()
         {
             Medicamento = new HashSet<Medicamento>();
@@ -21,7 +21,26 @@ namespace Model
         [StringLength(50)]
         public string Descripcion { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Medicamento> Medicamento { get; set; }
+
+        public List<TipoMedicamento> GetAllTipoMedicamento()
+        {
+            List<TipoMedicamento> tipoMedicamento = new List<TipoMedicamento>();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    tipoMedicamento = context.TipoMedicamento
+                        .ToList();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+            }
+
+            return tipoMedicamento;
+        }
     }
 }

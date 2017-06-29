@@ -1,7 +1,6 @@
 ﻿@model Model.Mascota
-@using Model
+
 @{
-    Cliente c = new Cliente();
     ViewBag.Title = (Model.MascotaId > 0 ? Model.Nombre : "Nuevo registro");
 }
 
@@ -12,17 +11,17 @@
         <li class="active">@(Model.MascotaId > 0 ? Model.Nombre : "Nuevo Registro")</li>
     </ol>
 </div>
-@using (Html.BeginForm("Crud", "Mascota", FormMethod.Post, new { id = "frm-mascota", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Crud", "Mascota", FormMethod.Post, new { id = "frm-mascota" }))
 {
     <div class="panel panel-success row">
         <div class="panel-heading">
             @if (Model.MascotaId > 0)
             {
-                <h3 style="color:#fff;">Editar Mascota</h3>
+                <h3>Editar Mascota</h3>
             }
             else
             {
-                <h3 style="color:#fff;">Registrar Mascota</h3>
+                <h3>Registrar Mascota</h3>
             }
         </div>
         <div class="panel-body">
@@ -38,7 +37,7 @@
                     }
                     
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.ClienteId, "Dueño")
+                        @Html.LabelFor(model => model.ClienteId, "Dueño *")
                         <div class='input-group'>
                             @Html.DropDownList("ClienteId", (IEnumerable<SelectListItem>)ViewBag.Clientes, "Seleccione Dueño", new { @class = "form-control" })
                             <span class="btn btn-success input-group-addon" id="btnCliente">
@@ -51,7 +50,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.EspecieId, "Especie")
+                        @Html.LabelFor(model => model.EspecieId, "Especie *")
                         @Html.DropDownList("EspecieId", (IEnumerable<SelectListItem>)ViewBag.Especies, "Seleccione Especie", new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.EspecieId, null, new { @class = "label label-danger" })
@@ -59,7 +58,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.RazaId, "Raza")
+                        @Html.LabelFor(model => model.RazaId, "Raza *")
                         @if (Model.ClienteId > 0)
                         {
                             @Html.DropDownList("RazaId", (IEnumerable<SelectListItem>)ViewBag.Razas, "Seleccione Raza", new { @class = "form-control" })   
@@ -74,7 +73,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Nombre)
+                        @Html.LabelFor(model => model.Nombre, "Nombre *")
                         @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "label label-danger" })
@@ -82,9 +81,9 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.FechaNacimiento, "Fecha de Nacimiento")
+                        @Html.LabelFor(model => model.FechaNacimiento, "Fecha de Nacimiento *")
                         <div class='input-group date' id='datetimepicker1'>
-                            @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control FechaNacimiento" })
+                            @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control fecha" })
                             <span class="input-group-addon">
                                 <span class="fa fa-calendar"></span>
                             </span>
@@ -113,30 +112,30 @@
     </div>
 }
 
-
-<div class="modal fade" id="modalAgregar" tabindex="-1"
-     role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="padding-bottom: 15px;">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title">Registrar Dueño</h4>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("Crud", "Cliente", FormMethod.Post, new { @id = "frm-cliente" }))
+                @using (Html.BeginForm("Crud", "Cliente", FormMethod.Post, new { @id = "frm-registrarCliente" }))
                 {
                     <div class="panel panel-success row">
                         <div class="panel-heading">
-                            <h3 style="color:#fff;">Registrar Cliente</h3>
+                            <h3>Registrar Cliente</h3>
                         </div>
                         <div class="panel-body">
                             <div id="form-cliente">
 
+                                <div class="form-group">
+                                    <span class="label label-danger" id="MensajeError"></span>
+                                </div>
                                 <div class="form-group col-sm-12">
-                                    <label for="Nombre">Nombre</label>
+                                    <label for="Nombre">Nombre *</label>
                                     <input type="text" class="form-control" id="Nombre" name="Nombre" />
                                     <div class="form-group">
                                         <span class="label label-danger" id="NombreCliente"></span>
@@ -144,7 +143,7 @@
                                 </div>
 
                                 <div class="form-group col-sm-12">
-                                    <label for="Apellido">Apellido</label>
+                                    <label for="Apellido">Apellido *</label>
                                     <input type="text" class="form-control" id="Apellido" name="Apellido" />
                                     <div class="form-group">
                                         <span class="label label-danger" id="ApellidoCliente"></span>
@@ -152,7 +151,7 @@
                                 </div>
 
                                 <div class="form-group col-sm-12">
-                                    <label for="Telefono">Telefono</label>
+                                    <label for="Telefono">Telefono *</label>
                                     <input type="text" class="form-control" id="Telefono" name="Telefono" />
                                     <div class="form-group">
                                         <span class="label label-danger" id="TelefonoCliente"></span>
@@ -166,7 +165,7 @@
                             </div>
                             <div class="form-group col-sm-12 hide" id="ClienteGuardado">
                                 <div class="form-group">
-                                    <span class="label label-success" id="MensajeExito" style="font-size:21px;"><i class='fa fa-check-circle' style='float:right;font-size:21px;'></i></span>
+                                    <span class="label label-success" id="MensajeExito"><i class='fa fa-check-circle'></i></span>
                                 </div>
                             </div>
                         </div>
@@ -182,112 +181,3 @@
     </div>
 
 </div>
-
-<script>
-    $(function () {
-        $("#EspecieId").change(function () {
-            $("#RazaId").empty();
-            $.ajax({
-                type: 'POST',  
-                url: '@Url.Action("GetAllRazasByEspecie")',
-                dataType: 'json',
-                data: { id: $("#EspecieId").val() },   
-                success: function (razas) {
-                    $("#RazaId").append('<option value="">' +
-                         'Seleccione una raza' + '</option>');
-                    $.each(razas, function (i, raza) {  
-                        $("#RazaId").append('<option value="' + raza.Value + '">' +
-                             raza.Text + '</option>');
-                    });
-                },
-                error: function (ex) {
-                    $("#RazaId").append('<option value="">' +
-                         'Debe elegir una Especie' + '</option>');
-                }  
-            });
-            return false;
-        });
-        $('.FechaNacimiento').datepicker({
-            changeMonth: true,
-            changeYear: true,
-            maxDate: -7,
-            yearRange: "-7:+0"
-        });
-        $("#btnCliente").click(function () {
-            $('#modalAgregar').modal('show');
-        });
-        $("#frm-cliente").submit(function () {
-            var form = $(this);
-            mostrar();
-            form.ajaxSubmit({
-                dataType: 'JSON',
-                type: 'POST',
-                url: '/Cliente/Crud',
-                data: form.serialize(),
-                success: function (r) {
-                    setTimeout(ocultar, 1000);
-                    setTimeout((function () {
-                        if (r.Message == "Registro guardado") {
-                            $("#btnRegistrar").prop("disabled", true);
-                            $("#NombreCliente").text(r.Nombre).hide();
-                            $("#ApellidoCliente").text(r.Apellido).hide();
-                            $("#TelefonoCliente").text(r.Telefono).hide();
-                            $("#form-cliente").addClass("hide"); 
-                            $("#MensajeExito").text(r.Message);
-                            $("#ClienteGuardado").removeClass("hide");
-                            $("#ClienteId").empty();
-                            $.ajax({
-                                type: 'POST',
-                                url: '/Cliente/GetAllClientesByLast',
-                                dataType: 'json',
-                                success: function (clientes) {
-                                    $("#ClienteId").append('<option value="">' +
-                                         'Seleccione un cliente' + '</option>');
-                                    $.each(clientes, function (i, cliente) {
-                                        $("#ClienteId").append('<option value="' + cliente.Value + '">' +
-                                             cliente.Text + '</option>');
-                                    });
-                                },
-                                error: function (ex) {
-                                    $("#ClienteId").append('<option value="">' +
-                                         'Busque un Cliente' + '</option>');
-                                }
-                            });
-
-                        }
-                        else {
-                            if (r.Nombre != "") {
-                                $("#NombreCliente").text(r.Nombre).show();
-                            } else {
-                                $("#NombreCliente").text(r.archivo).hide();
-                            }
-                            if (r.Apellido != "") {
-                                $("#ApellidoCliente").text(r.Apellido).show();
-                            } else {
-                                $("#ApellidoCliente").text(r.Apellido).hide();
-                            }
-                            if (r.Telefono != "") {
-                                $("#TelefonoCliente").text(r.Telefono).show();
-                            } else {
-                                $("#TelefonoCliente").text(r.Telefono).hide();
-                            }
-                        }
-                    }), 1000);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus);
-                }
-            });
-            return false;
-        });
-        function mostrar() {
-            $(".modal").addClass("o-hidden");
-            $(".container-preloader").show();
-        }
-        function ocultar() {
-            $(".modal").removeClass("o-hidden");
-            $(".container-preloader").hide();
-        }
-    });
-
-</script>

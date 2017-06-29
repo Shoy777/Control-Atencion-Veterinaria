@@ -54,8 +54,10 @@
     <Compile Include="Boleta.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Consulta.cs" />
+    <Compile Include="CustomDateRange.cs" />
     <Compile Include="DetalleBoleta.cs" />
     <Compile Include="Diagnostico.cs" />
+    <Compile Include="DiagnosticoList.cs" />
     <Compile Include="Especie.cs" />
     <Compile Include="Laboratorio.cs" />
     <Compile Include="Mascota.cs" />

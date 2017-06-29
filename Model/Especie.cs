@@ -4,13 +4,13 @@ namespace Model
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
     using System.Linq;
 
     [Table("Especie")]
     public partial class Especie
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Especie()
         {
             Mascota = new HashSet<Mascota>();
@@ -24,17 +24,31 @@ namespace Model
         [StringLength(50)]
         public string Descripcion { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mascota> Mascota { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Medicamento> Medicamento { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Raza> Raza { get; set; }
 
-        [NotMapped]
-        public string Message { get; set; }
+        public Especie GetEspecie(int id)
+        {
+            Especie especie = new Especie();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    especie = context.Especie
+                        .Where(x => x.EspecieId == id)
+                        .Single();
+                }
+                catch (Exception e)
+                {
+                    new Exception(e.Message);
+                }
+            }
+            return especie;
+        }
 
         public List<Especie> GetAllEspecies()
         {
@@ -54,6 +68,35 @@ namespace Model
             }
 
             return especies;
+        }
+
+        public void CrudEspecie()
+        {
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (this.EspecieId == 0)
+                        {
+                            context.Entry(this).State = EntityState.Added;
+                        }
+                        else
+                        {
+                            context.Entry(this).State = EntityState.Modified;
+                        }
+                        context.SaveChanges();
+                        transaction.Commit();
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        new Exception(e.Message);
+                    }
+                }
+            }
         }
     }
 }

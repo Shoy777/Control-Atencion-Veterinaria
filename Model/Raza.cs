@@ -4,6 +4,7 @@ namespace Model
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
     using System.Linq;
 
@@ -30,8 +31,26 @@ namespace Model
 
         public virtual ICollection<Mascota> Mascota { get; set; }
 
-        [NotMapped]
-        public string Message { get; set; }
+        public Raza GetRaza(int id)
+        {
+            Raza raza = new Raza();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    raza = context.Raza
+                        .Include("Especie")
+                        .Where(x => x.EspecieId == id)
+                        .Single();
+                }
+                catch (Exception e)
+                {
+                    new Exception(e.Message);
+                }
+            }
+            return raza;
+        }
 
         public List<Raza> GetAllRazas()
         {
@@ -41,12 +60,12 @@ namespace Model
             {
                 try
                 {
-                    razas = context.Raza
+                    razas = context.Raza.Include("Especie")
                         .ToList();
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    new Exception(e.Message);
                 }
             }
 
@@ -61,17 +80,46 @@ namespace Model
             {
                 try
                 {
-                    razas = context.Raza
+                    razas = context.Raza.Include("Especie")
                         .Where(x => x.EspecieId == id)
                         .ToList();
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    new Exception(e.Message);
                 }
             }
 
             return razas;
+        }
+
+        public void CrudRaza()
+        {
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (this.RazaId == 0)
+                        {
+                            context.Entry(this).State = EntityState.Added;
+                        }
+                        else
+                        {
+                            context.Entry(this).State = EntityState.Modified;
+                        }
+                        context.SaveChanges();
+                        transaction.Commit();
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        new Exception(e.Message);
+                    }
+                }
+            }
         }
 
     }

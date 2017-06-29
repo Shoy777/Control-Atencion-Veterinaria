@@ -117,16 +117,17 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Consulta\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AtencionController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\ConsultaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MascotaController.cs" />
+    <Compile Include="Controllers\MedicamentoController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -149,6 +150,7 @@
     <Content Include="Assets\img\marker-2.png" />
     <Content Include="Assets\img\marker-3.png" />
     <Content Include="Assets\img\marker.png" />
+    <Content Include="Assets\img\user.png" />
     <Content Include="Assets\js\bootstrap.js" />
     <Content Include="Assets\js\bootstrap.min.js" />
     <Content Include="Assets\js\funciones.js" />
@@ -221,6 +223,26 @@
     <Content Include="Views\Usuario\Crud.cshtml" />
     <Content Include="Views\Search\Medicamentos.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Consulta\Crud.cshtml" />
+    <Content Include="Views\Consulta\Index.cshtml" />
+    <Content Include="Views\Consulta\Anuladas.cshtml" />
+    <Content Include="Views\Consulta\Atendidas.cshtml" />
+    <Content Include="Views\Consulta\Anular.cshtml" />
+    <Content Include="Views\Atencion\Registrar.cshtml" />
+    <Content Include="Views\Atencion\Index.cshtml" />
+    <Content Include="Views\Mascota\Info.cshtml" />
+    <Content Include="Views\Medicamento\Index.cshtml" />
+    <Content Include="Views\Medicamento\Crud.cshtml" />
+    <Content Include="Views\Medicamento\Info.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Cliente\Index.cshtml" />
+    <Content Include="Views\Cliente\Modificar.cshtml" />
+    <Content Include="Views\Usuario\Eliminados.cshtml" />
+    <Content Include="Views\Usuario\Eliminar.cshtml" />
+    <Content Include="Views\Usuario\Restaurar.cshtml" />
+    <Content Include="Views\Cliente\Info.cshtml" />
+    <Content Include="Views\Consulta\Restaurar.cshtml" />
+    <Content Include="Views\Consulta\Consultas.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

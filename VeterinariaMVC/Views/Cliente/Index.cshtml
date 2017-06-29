@@ -1,0 +1,62 @@
+﻿@model List<Model.Cliente>
+@{
+    ViewBag.Title = "Listado de Clientes";
+}
+
+<div class="breadcrumb">
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Clientes</h2>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Listado de Clientes
+    </div>
+    <div class="panel-body">
+        @if (Model.Count == 0)
+        {
+            <h3>Aún no hay clientes registradas</h3>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-left">
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Telefono</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.ClienteId</td>
+                            <td>@i.NombreCompleto</td>
+                            <td>@i.Telefono</td>
+                            @if (i.Estado == 0)
+                            {
+                                <td>De Baja</td>
+                            }else if(i.Estado == 1){
+                                <td>Activo</td>
+                            }
+                            <td class="text-right">
+                                <a class="btn btn-success" href="~/cliente/info/@i.ClienteId" title="Visualizar">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-default" href="~/cliente/modificar/@i.ClienteId" title="Editar">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

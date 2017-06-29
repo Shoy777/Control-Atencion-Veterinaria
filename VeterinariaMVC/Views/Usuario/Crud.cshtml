@@ -8,7 +8,7 @@
 <div class="breadcrumb row">
     <h2 class="text-center">Usuario</h2>
     <ol class="breadcrumb">
-        <li><a href="~/mascota/">Usuarios</a></li>
+        <li><a href="~/usuario/">Usuarios</a></li>
         <li class="active">@(Model.UsuarioId > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro")</li>
     </ol>
 </div>
@@ -16,12 +16,23 @@
 {
     <div class="panel panel-success row">
         <div class="panel-heading">
-            <h3 style="color:#fff;">Registrar Usuario</h3>
+            @if (Model.UsuarioId > 0)
+            {
+                <h3>Modificar Usuario</h3>   
+            }
+            else
+            {
+                <h3>Registrar Usuario</h3>
+            }
         </div>
         <div class="panel-body">
 
             <div class="row">
-
+                <div class="form-group col-sm-12">
+                    <div class="alert-danger">
+                        <h3 class="text-danger">@ViewBag.Message</h3>
+                    </div>
+                </div>
                 <div class="col-sm-8">
 
                     @Html.HiddenFor(model => model.UsuarioId)
@@ -31,20 +42,15 @@
                     }
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.RolId, "Rol")
-                        <div class='input-group'>
-                            @Html.DropDownList("RolId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Seleccione Rol", new { @class = "form-control" })
-                            <span class="btn btn-success input-group-addon" id="btnCliente">
-                                <span class="fa fa-plus"></span>
-                            </span>
-                        </div>
+                        @Html.LabelFor(model => model.RolId, "Rol *")
+                        @Html.DropDownList("RolId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Seleccione Rol", new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.RolId, null, new { @class = "label label-danger" })
                         </div>
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Nombre)
+                        @Html.LabelFor(model => model.Nombre, "Nombre *")
                         @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "label label-danger" })
@@ -52,7 +58,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Apellido)
+                        @Html.LabelFor(model => model.Apellido, "Apellido *")
                         @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.Apellido, null, new { @class = "label label-danger" })
@@ -60,7 +66,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Telefono)
+                        @Html.LabelFor(model => model.Telefono, "Telefono *")
                         @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.Telefono, null, new { @class = "label label-danger" })
@@ -68,7 +74,7 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.DNI)
+                        @Html.LabelFor(model => model.DNI, "DNI *")
                         @Html.TextBoxFor(model => model.DNI, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.DNI, null, new { @class = "label label-danger" })
@@ -76,8 +82,8 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Turno)
-                        <select name="Turno" class="form-control">
+                        @Html.LabelFor(model => model.Turno, "DNI *")
+                        <select name="Turno" id="Turno" class="form-control">
                             <option @(Model.Turno == 2 ? "selected" : "")>Seleccione un Turno</option>
                             <option @(Model.Turno == 0 ? "selected" : "") value="0">Mañana</option>
                             <option @(Model.Turno == 1 ? "selected" : "") value="1">Tarde</option>
@@ -88,37 +94,25 @@
                     </div>
 
                     <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.NombreUsuario)
+                        @Html.LabelFor(model => model.NombreUsuario, "Nombre de Usuario *")
                         @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control" })
                         <div class="form-group">
                             @Html.ValidationMessageFor(model => model.NombreUsuario, null, new { @class = "label label-danger" })
                         </div>
                     </div>
 
-                    @if (Model.UsuarioId == 0)
-                    {
-                    <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.Password)
-                        @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
-                        <div class="form-group">
-                            @Html.ValidationMessageFor(model => model.Password, null, new { @class = "label label-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-12">
-                        @Html.LabelFor(model => model.ConfirmPassword)
-                        @Html.TextBoxFor(model => model.ConfirmPassword, new { @class = "form-control" })
-                        <div class="form-group">
-                            @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "label label-danger" })
-                        </div>
-                    </div>   
-                    }
-
                 </div>
 
                 <div class="col-sm-4">
                     <div class="form-group col-sm-12">
-                        <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Registrar</button>
+                        @if (Model.UsuarioId > 0)
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Modificar</button>
+                        }
+                        else
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Registrar</button>
+                        }
                     </div>
                 </div>
             </div>

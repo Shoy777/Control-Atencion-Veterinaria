@@ -16,69 +16,14 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <style>
-        #frm-login {
-            background-color: rgba(255,255,255,.75);
-            padding: 0;
-            margin: 50px auto;
-            float: none;
-            max-width: 350px;
-        }
-
-        #frm-login .well {
-            background-color: rgba(93, 171, 94,.95);
-            color: #fff;
-            text-align: center;
-        }
-        .well {
-            background-color: rgba(255,255,255,.75);
-            margin-top: 0;
-            border-radius: 0;
-        }
-        .input-group-addon {
-            background-color: #5dab5e;
-            color: #fff;
-        }
-        button{
-            position: relative;
-        }
-        button:hover .login-submit{
-            background-color: rgba(0,0,0,.2);
-        }
-        input[type="checkbox"],
-        input[type="checkbox"] {
-            vertical-align: sub;
-            margin-top: 0;
-            margin-left: 10px;
-        }
-        .login-submit {
-            color: #fff;
-            display: block;
-            position: absolute;
-            text-align: center;
-            width: 34px;
-            height: 34px;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            border: none;
-            background-color: transparent;
-            right: 0;
-            top: 0;
-            border-left: 1px solid rgba(255,255,255,.5);
-        }
-        .error {
-            color: #ff5353;
-        }
-
-    </style>
 </head>
-<body>
+<body id="login">
 
     <div class="well">
         <h1 class="text-center">Bienvenido - Inicie Sesión</h1>
         <span class=""></span>
     </div>
+
     @using (Html.BeginForm("Login", "Usuario", FormMethod.Post, new { id = "frm-login" }))
     {
         <h2 class="well">Login</h2>
@@ -114,7 +59,7 @@
             <div class="form-group">
                 <span class="error">@ViewBag.Message</span>
             </div>
-            <div class="form-group" style="position:relative;">
+            <div class="form-group relative">
                 <button type="submit" class="form-control btn btn-success">
                     Iniciar Sesion
                     <span class="login-submit">

@@ -1,0 +1,64 @@
+﻿@model List<Model.Medicamento>
+@{
+    ViewBag.Title = "Listado de Medicamentos";
+}
+
+<div class="breadcrumb">
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Medicamentos</h2>
+        </div>
+        <div class="col-sm-2 text-right">
+            <a class="btn btn-success" href="~/medicamento/crud">Nuevo registro</a>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Listado de Medicamentos
+    </div>
+    <div class="panel-body">
+        @if (Model.Count == 0)
+        {
+            <h3>Aún no hay medicamentos registradas</h3>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-left">
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Laboratorio</th>
+                        <th>Tipo de Medicamento</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.MedicamentoId</td>
+                            <td>@i.Nombre</td>
+                            <td>@i.Especie.Descripcion</td>
+                            <td>@i.Laboratorio.Descripcion</td>
+                            <td>@i.TipoMedicamento.Descripcion</td>
+                            <td>Activo</td>
+                            <td class="text-right">
+                                <a class="btn btn-success" href="~/medicamento/info/@i.MedicamentoId" title="Visualizar">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a class="btn btn-default" href="~/medicamento/crud/@i.MedicamentoId" title="Editar">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

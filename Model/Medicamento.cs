@@ -4,13 +4,13 @@ namespace Model
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity;
     using System.Data.Entity.Spatial;
     using System.Linq;
 
     [Table("Medicamento")]
     public partial class Medicamento
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Medicamento()
         {
             DetalleBoleta = new HashSet<DetalleBoleta>();
@@ -36,12 +36,8 @@ namespace Model
 
         public int Stock { get; set; }
 
-        [StringLength(255)]
-        public string Imagen { get; set; }
-
         public byte? Estado { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetalleBoleta> DetalleBoleta { get; set; }
 
         public virtual Especie Especie { get; set; }
@@ -50,8 +46,30 @@ namespace Model
 
         public virtual TipoMedicamento TipoMedicamento { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Receta> Receta { get; set; }
+
+        public Medicamento GetMedicamento(int id)
+        {
+            Medicamento medicamento = new Medicamento();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    medicamento = context.Medicamento
+                        .Include("TipoMedicamento")
+                        .Include("Especie")
+                        .Include("Laboratorio")
+                        .Where(x => x.MedicamentoId == id)
+                        .Single();
+                }
+                catch (Exception e)
+                {
+                    new Exception(e.Message);
+                }
+            }
+            return medicamento;
+        }
 
         public List<Medicamento> GetAllMedicamentos()
         {
@@ -65,6 +83,7 @@ namespace Model
                         .Include("TipoMedicamento")
                         .Include("Especie")
                         .Include("Laboratorio")
+                        .OrderByDescending(x => x.MedicamentoId)
                         .ToList();
                 }
                 catch (Exception e)
@@ -75,5 +94,37 @@ namespace Model
 
             return medicamentos;
         }
+
+        public void CrudMedicamento()
+        {
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (this.MedicamentoId == 0)
+                        {
+                            context.Entry(this).Entity.Estado = 1;
+                            context.Entry(this).Entity.Stock = 0;
+                            context.Entry(this).State = EntityState.Added;
+                        }
+                        else
+                        {
+                            context.Entry(this).State = EntityState.Modified;
+                        }
+                        context.SaveChanges();
+                        transaction.Commit();
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        new Exception(e.Message);
+                    }
+                }
+            }
+        }
+
     }
 }

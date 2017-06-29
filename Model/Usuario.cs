@@ -21,6 +21,8 @@ namespace Model
         }
 
         public int UsuarioId { get; set; }
+
+        [Required]
         public int RolId { get; set; }
 
         [Required(ErrorMessage = "Ingrese Nombre")]
@@ -42,20 +44,11 @@ namespace Model
 
         [Required(ErrorMessage = "Ingrese Nombre de Usuario")]
         [StringLength(50)]
-        [Display(Name = "Nombre de usuario")]
         public string NombreUsuario { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Contraseña")]
         public string Password { get; set; }
-
-        [NotMapped]
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirmar contraseña")]
-        [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
-        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Seleccione un turno")]
         public byte Turno { get; set; }
@@ -66,13 +59,10 @@ namespace Model
         public virtual Rol Rol { get; set; }
 
         [NotMapped]
-        public string Message { get; set; }
-
-        [NotMapped]
         [Display(Name = "¿Recordar cuenta?")]
         public bool RememberMe { get; set; }
 
-        public List<Usuario> GetAllUsuarios()
+        public List<Usuario> GetAllUsuarios(int estado)
         {
             List<Usuario> usuarios = new List<Usuario>();
 
@@ -81,12 +71,14 @@ namespace Model
                 try
                 {
                     usuarios = context.Usuario
+                        .Include("Rol")
                         .OrderByDescending(x => x.UsuarioId)
+                        .Where(x => x.Estado == estado)
                         .ToList();
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    throw new Exception(e.Message);
                 }
             }
 
@@ -108,7 +100,7 @@ namespace Model
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    throw new Exception(e.Message);
                 }
             }
             return usuario;
@@ -124,14 +116,16 @@ namespace Model
                     {
                         if (this.UsuarioId == 0)
                         {
-                            context.Entry(this).Entity.Estado = 1;//Activo = 1, De Baja = 0
+                            context.Entry(this).Entity.Estado = 1;//Activo = 1, Eliminado = 0
+                            context.Entry(this).Entity.Password = "123456";//Clave por defecto -- Luego el usuario puede modificarlo
+
                             context.Entry(this).State = EntityState.Added;
                         }
                         else
                         {
                             context.Configuration.AutoDetectChangesEnabled = false;
                             context.Configuration.ValidateOnSaveEnabled = false;
-                            
+
                             context.Entry(this).State = EntityState.Modified;
 
                             context.Entry(this).Property(x => x.Password).IsModified = false;
@@ -140,13 +134,11 @@ namespace Model
                         }
                         context.SaveChanges();
                         transaction.Commit();
-                        Message = "Registro guardado";
 
                     }
                     catch (Exception e)
                     {
                         transaction.Rollback();
-                        Message = e.Message;
                         throw new Exception(e.Message);
                     }
                 }
@@ -169,7 +161,6 @@ namespace Model
                 catch (Exception e)
                 {
                     throw new Exception(e.Message);
-                    //Message = e.Message;
                 }
             }
             return usuario;
@@ -195,19 +186,53 @@ namespace Model
                         
                         context.SaveChanges();
                         transaction.Commit();
-                        Message = "La contraseña se ha cambiado.";
 
                     }
                     catch (Exception e)
                     {
                         transaction.Rollback();
-                        Message = e.Message;
                         throw new Exception(e.Message);
                     }
                 }
             }
             return usu;
         }
+
+        /*
+         * Eliminar 0 -- Eliminado
+         * Restaurar 1 -- Activo
+         */
+        public int CambiarEstado(int estado, int UsuarioId)
+        {
+            int usu = 0;
+
+            using (var context = new VeterinariaBDContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        usu = context.Database.ExecuteSqlCommand(
+                                  "UPDATE Usuario set Estado = " + estado + " WHERE UsuarioId = @UsuarioId",
+                                  new SqlParameter("UsuarioId", UsuarioId)
+                              );
+
+                        context.Configuration.ValidateOnSaveEnabled = false;
+
+                        context.SaveChanges();
+                        transaction.Commit();
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new Exception(e.Message);
+                    }
+                }
+            }
+            return usu;
+        }
+
     }
 
     public class CambiarPassword
@@ -228,6 +253,7 @@ namespace Model
         [Display(Name = "Confirmar la nueva contraseña")]
         [Compare("NewPassword", ErrorMessage = "La nueva contraseña y la contraseña de confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
+
     }
 
 }

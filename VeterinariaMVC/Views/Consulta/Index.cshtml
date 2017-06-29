@@ -1,0 +1,77 @@
+﻿@model List<Model.Consulta>
+@{
+    ViewBag.Title = "Listado de Consultas";
+}
+
+<div class="breadcrumb">
+    <div class="row">
+        <div class="col-sm-10">
+            <h2>Consultas Para Hoy</h2>
+        </div>
+        <div class="col-sm-2 text-right">
+            <a class="btn btn-success" href="~/consulta/crud">Nuevo registro</a>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="~/consulta/">Hoy</a></li>
+    <li role="presentation"><a href="~/consulta/consultas">Por Atender</a></li>
+    <li role="presentation"><a href="~/consulta/atendidas">Atendidas</a></li>
+    <li role="presentation"><a href="~/consulta/anuladas">Anuladas</a></li>
+</ul>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        Listado de Consultas
+    </div>
+    <div class="panel-body">
+        @if (Model.Count == 0)
+        {
+            <h3>Aún no hay consultas por hoy</h3>
+        }
+        else
+        {
+
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Mascota</th>
+                        <th>Fecha de Registro</th>
+                        <th>Fecha de Atencion</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td>@i.ConsultaId</td>
+                            <td>@i.Cliente.Nombre @i.Cliente.Apellido</td>
+                            <td>@i.Mascota.Nombre</td>
+                            <td>@i.FechaRegistro</td>
+                            <td>@i.FechaAtencion</td>
+                            <td>@i.Precio</td>
+                            @if (i.Estado == 1){<td>Por Atender</td> }
+                            <td class="text-right">
+                                <a class="btn btn-success" href="~/atencion/registrar/@i.ConsultaId" title="Atender">
+                                    <i class="fa fa-medkit"></i>
+                                </a>
+                                <a class="btn btn-danger" href="~/consulta/anular/@i.ConsultaId" title="Anular">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                                <a class="btn btn-default" href="~/consulta/crud/@i.ConsultaId" title="Editar">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

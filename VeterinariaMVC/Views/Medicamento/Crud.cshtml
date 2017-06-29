@@ -1,0 +1,110 @@
+﻿@model Model.Medicamento
+
+@{
+    ViewBag.Title = (Model.MedicamentoId > 0 ? Model.Nombre : "Nuevo registro");
+}
+
+<div class="breadcrumb row">
+    <h2 class="text-center">Medicamentos</h2>
+    <ol class="breadcrumb">
+        <li><a href="~/medicamento/">Medicamentos</a></li>
+        <li class="active">@(Model.MedicamentoId > 0 ? Model.Nombre : "Nuevo Registro")</li>
+    </ol>
+</div>
+@using (Html.BeginForm("Crud", "Medicamento", FormMethod.Post, new { id = "frm-medicamento", enctype = "multipart/form-data" }))
+{
+    <div class="panel panel-success row">
+        <div class="panel-heading">
+            @if (Model.MedicamentoId > 0)
+            {
+                <h3>Editar Medicamento</h3>
+            }
+            else
+            {
+                <h3>Registrar Medicamento</h3>
+            }
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-sm-8">
+
+                    @Html.HiddenFor(model => model.MedicamentoId)
+                    @if (Model.MedicamentoId > 0)
+                    {
+                        @Html.HiddenFor(model => model.Estado)
+                    }
+                    
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.LaboratorioId, "Laboratorio *")
+                        <div class='form-group'>
+                            @Html.DropDownList("LaboratorioId", (IEnumerable<SelectListItem>)ViewBag.Laboratorios, "Seleccione Laboratorio", new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.LaboratorioId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.EspecieId, "Especie *")
+                        @Html.DropDownList("EspecieId", (IEnumerable<SelectListItem>)ViewBag.Especies, "Seleccione Especie", new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.EspecieId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.TipoMedicamentoId, "Tipo Medicamento *")
+                        @Html.DropDownList("TipoMedicamentoId", (IEnumerable<SelectListItem>)ViewBag.TipoMedicamentos, "Seleccione Tipo Medicamento", new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.TipoMedicamentoId, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Nombre, "Nombre *")
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Descripcion, "Descripcion")
+                        <div class="form-group">
+                            @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.Descripcion, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Precio, "Precio *")
+                        <div class="form-group">
+                            @Html.TextBoxFor(model => model.Precio, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.ValidationMessageFor(model => model.Precio, null, new { @class = "label label-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group col-sm-12">
+                        @if (Model.MedicamentoId > 0)
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Guardar Cambios</button>
+                        }
+                        else
+                        {
+                            <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Registrar</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

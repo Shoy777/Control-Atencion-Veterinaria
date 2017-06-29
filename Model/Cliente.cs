@@ -7,6 +7,7 @@ namespace Model
     using System.Data.Entity.Spatial;
     using System.Linq;
     using System.Data.Entity;
+    using System.Text;
 
     [Table("Cliente")]
     public partial class Cliente
@@ -21,14 +22,17 @@ namespace Model
 
         [Required]
         [StringLength(50)]
+        [Display(Name="Nombre *")]
         public string Nombre { get; set; }
 
         [Required]
         [StringLength(50)]
+        [Display(Name = "Apellido *")]
         public string Apellido { get; set; }
 
         [Required]
         [StringLength(12)]
+        [Display(Name = "Telefono *")]
         public string Telefono { get; set; }
 
         public byte Estado { get; set; }
@@ -37,11 +41,16 @@ namespace Model
 
         public virtual ICollection<Mascota> Mascota { get; set; }
 
-        [NotMapped]
-        public string Message { get; set; }
+        /*
+         * Campo Adicional Creado por conflicto de 
+         * data entity dynamic proxies
+         * al retornar nombre y apellido concatenado
+         * public string NombreCompleto { get { return Nombre + " " + Apellido; } }
+         */
+        public string NombreCompleto { get; set; }
 
         [NotMapped]
-        public string NombreCompleto { get { return Apellido + " " + Nombre; } }
+        public string Message { get; set; }
 
         public List<Cliente> GetAllClientes()
         {
@@ -57,7 +66,7 @@ namespace Model
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    new Exception(e.Message);
                 }
             }
 
@@ -79,7 +88,7 @@ namespace Model
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    new Exception(e.Message);
                 }
             }
             return cliente;
@@ -93,24 +102,30 @@ namespace Model
                 {
                     try
                     {
+                        StringBuilder name = new StringBuilder();
+                        name.Append(this.Nombre);
+                        name.Append(" ");
+                        name.Append(this.Apellido);
+
                         if (this.ClienteId == 0)
                         {
                             context.Entry(this).Entity.Estado = 1;//Activo = 1, De Baja = 0
+                            context.Entry(this).Entity.NombreCompleto = name.ToString();
                             context.Entry(this).State = EntityState.Added;
                         }
                         else
                         {
+                            context.Entry(this).Entity.NombreCompleto = name.ToString();
                             context.Entry(this).State = EntityState.Modified;
                         }
                         context.SaveChanges();
                         transaction.Commit();
-                        Message = "Registro guardado";
 
                     }
                     catch (Exception e)
                     {
                         transaction.Rollback();
-                        Message = e.Message;
+                        new Exception(e.Message);
                     }
                 }
             }
@@ -125,16 +140,39 @@ namespace Model
                 try
                 {
                     clientes = context.Cliente
+                        .Include("Mascota")
                         .OrderByDescending(x => x.ClienteId)
                         .ToList();
                 }
                 catch (Exception e)
                 {
-                    Message = e.Message;
+                    new Exception(e.Message);
                 }
             }
 
             return clientes;
         }
+
+        public Cliente GetClienteByQuery(string query)
+        {
+            Cliente cliente = new Cliente();
+
+            using (var context = new VeterinariaBDContext())
+            {
+                try
+                {
+                    cliente = context.Cliente
+                        .Include(m => m.Mascota)
+                        .Where(x => x.Nombre == query)
+                        .Single();
+                }
+                catch (Exception e)
+                {
+                    new Exception(e.Message);
+                }
+            }
+            return cliente;
+        }
+
     }
 }

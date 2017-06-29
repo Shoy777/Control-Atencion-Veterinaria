@@ -1,0 +1,85 @@
+﻿@model Model.Usuario
+@{
+    ViewBag.Title = (Model.UsuarioId > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo registro");
+}
+
+<div class="breadcrumb row">
+    <h2 class="text-center">Usuario</h2>
+    <ol class="breadcrumb">
+        <li><a href="~/usuario/">Usuarios</a></li>
+        <li class="active">@(Model.UsuarioId > 0 ? Model.Nombre + " " + Model.Apellido : "Nuevo Registro")</li>
+    </ol>
+</div>
+
+@using (Html.BeginForm("Eliminar", "Usuario", FormMethod.Post, new { id = "frm-usuario" }))
+{
+    <div class="panel panel-success row">
+        <div class="panel-heading">
+            <h3>Eliminar Usuario</h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <div class="alert-danger">
+                        <h3 class="text-danger">@ViewBag.Message</h3>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+
+                    @Html.HiddenFor(model => model.UsuarioId)
+                    @if (Model.UsuarioId > 0)
+                    {
+                        @Html.HiddenFor(model => model.Estado)
+                    }
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.RolId, "Rol")
+                        @Html.DropDownList("RolId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Seleccione Rol", new { @class = "form-control", @disabled = "" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Nombre)
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @disabled="" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Apellido)
+                        @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control", @disabled="" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Telefono)
+                        @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control", @disabled="" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.DNI)
+                        @Html.TextBoxFor(model => model.DNI, new { @class = "form-control", @disabled="" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.Turno)
+                        <select name="Turno" class="form-control" disabled="">
+                            <option @(Model.Turno == 2 ? "selected" : "")>Seleccione un Turno</option>
+                            <option @(Model.Turno == 0 ? "selected" : "") value="0">Mañana</option>
+                            <option @(Model.Turno == 1 ? "selected" : "") value="1">Tarde</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(model => model.NombreUsuario)
+                        @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control", @disabled="" })
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group col-sm-12">
+                        <button type="submit" value="" id="btnGuardar" class="btn btn-success form-control">Dar de Baja</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
