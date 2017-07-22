@@ -1,16 +1,15 @@
 # Veterinaria-ASPNET-MVC
 
-El proyecto esta constituido por los módulos de Mantenimiento (Usuario, Mascota, Cliente, Medicamento), 
-Consulta (Registrar, Modificar, Anular, Restaurar), Atención (Diagnostico, Receta) y Ventas (en veremos).
+El proyecto esta constituido por los módulos de Mantenimiento (Usuario, Mascota, Cliente, Medicamento, Tipo Medicamento, Especie, Laboratorio), 
+Consulta (Registrar, Modificar, Anular, Restaurar), Atención (Diagnostico, Receta).
 
-Las tablas raza, especie, tipo de medicamento ya contienen información detallada, correspondiente a la temática de 
-una veterinaria. Así que no se hizo el manteniento de estas. Especies (perro, gato, conejo, pajaro, roedor). 
-La raza y el tipo de medicamento depende de la especie. Para una mejor especificación de la información de la 
+* Especies (perro, gato, conejo, pajaro, roedor). 
+* La raza y el tipo de medicamento depende de la especie. Para una mejor especificación de la información de la 
 mascota y el medicamento.
 
 ## Módulo Mantenimiento
 
-Este módulo permite gestionar la información de usuarios, clientes, mascotas y medicamentos.
+Este módulo permite gestionar la información de usuarios, clientes, mascotas y medicamentos, especies, laboratorios, tipos de medicamento.
 
 ## Usuario
 Aquí se gestiona la información del usuario. Roles (Admin, Veterinario, Cajero). Admin y Veterinario tienen acceso
@@ -134,8 +133,5 @@ Citas para atender a las mascotas
 
 ## Módulo Atención
 Proximamente
-
-## Módulo Consulta
-Posiblemente
 
 Pequeña Aplicación para una Veterinaria desarrollada con MVC5, SQL, Entity Framework, Bootstrap y Javascript
